@@ -1,5 +1,7 @@
 import reflex as rx
 
+from portal_management.state.login_state import LoginState
+
 def sidebar_item(
     text: str, icon: str, href: str
 ) -> rx.Component:
@@ -41,7 +43,7 @@ def sidebar_bottom_profile() -> rx.Component:
             rx.vstack(
                 rx.hstack(
                     rx.image(
-                        src="/logo.jpg",
+                        src="images/metadata-icon-removebg-preview.png",
                         width="2.25em",
                         height="auto",
                         border_radius="25%",
@@ -79,7 +81,7 @@ def sidebar_bottom_profile() -> rx.Component:
                                     weight="bold",
                                 ),
                                 rx.text(
-                                    "user@reflex.dev",
+                                    f"{LoginState.username}",
                                     size="2",
                                     weight="medium",
                                 ),
@@ -108,7 +110,6 @@ def sidebar_bottom_profile() -> rx.Component:
                 bg=rx.color("accent", 3),
                 align="start",
                 height="100%",
-                # height="650px",
                 width="16em",
             ),
         ),
