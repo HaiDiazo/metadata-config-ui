@@ -13,7 +13,7 @@ def stat_card(title: str, value: str, color: str = "blue.500") -> rx.Component:
         bg="white",
         padding="1.5em",
         border_radius="1em",
-        shadow="md",
+        shadow="lg",
         width="100%",
         text_align="center",
     )
@@ -53,47 +53,50 @@ def timeseries_chart():
 
 def dashboard_page() -> rx.Component:
     return rx.hstack(
-        sidebar_bottom_profile(),
-        rx.container(
-            rx.box(
-                rx.vstack(
-                    rx.heading("Dashboard", size="7"),
+        rx.box(
+            sidebar_bottom_profile(),
+            width="250px",
+            height="100vh",
+            bg="white",
+            shadow="md",
+        ),
+        rx.box(
+            rx.vstack(
+                rx.heading("Dashboard", size="7"),
 
-                    rx.grid(
-                        stat_card("Total Users", f"{DashboardState.total_users}"),
-                        stat_card(
-                            "Total Metadata",
-                            f"{DashboardState.total_metadata:,.0f}",
-                            color="green.500",
-                        ),
-                        columns="2",
-                        spacing="2",
-                        width="100%",
+                rx.grid(
+                    stat_card("Total Users", f"{DashboardState.total_users}"),
+                    stat_card(
+                        "Total Metadata",
+                        f"{DashboardState.total_metadata:,.0f}",
+                        color="green.500",
                     ),
-
-                    # Chart
-                    rx.box(
-                        rx.heading("Data Statistic In Day", size="6", mb="1em", color="grey"),
-                        timeseries_chart(),
-                        bg="white",
-                        padding="1.5em",
-                        border_radius="1em",
-                        shadow="md",
-                        width="100%",
-                    ),
-                    spacing="4",
-                    align_items="stretch",
+                    columns="2",
+                    spacing="2",
                     width="100%",
                 ),
-                padding="2em",
-                bg="gray.50",
-                height="100vh",
+
+                rx.box(
+                    rx.heading("Metadata Statistic In Day", size="6", mb="2em", color="grey"),
+                    timeseries_chart(),
+                    bg="white",
+                    spacing="2",
+                    padding="1.5em",
+                    border_radius="1em",
+                    shadow="lg",
+                    width="100%",
+                ),
+                flex="1",
+                min_width="0",
+                overflow="auto",
+                spacing="6",
+                align_items="stretch",
                 width="100%",
             ),
             padding="2em",
-            bg="gray.50",
-            width="100%",
+            bg="#F3F4F6",
             height="100vh",
+            flex="1",
         ),
         spacing="0",
         on_mount=DashboardState.load_data
