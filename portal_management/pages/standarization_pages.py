@@ -69,19 +69,28 @@ def table_with_edit():
 
 def standarization_page() -> rx.Component:
     return rx.hstack(
-        sidebar_bottom_profile(),
-        rx.container(
+        rx.box(
+            sidebar_bottom_profile(),
+            width="250px",
+            height="100vh",
+            bg="white",
+            shadow="md",
+        ),
+        rx.box(
             rx.vstack(
                 rx.heading("Standarization", size="7"),
                 table_with_edit(),
-                padding="2em",
-                bg="gray.50",
-                height="100vh",
+                flex="1",
+                min_width="0",
+                overflow="auto",
+                spacing="6",
+                align_items="stretch",
                 width="100%",
             ),
             padding="2em",
-            bg="gray.50",
-            width="100%",
+            bg="#F3F4F6",
             height="100vh",
-        )
+            flex="1",
+        ),
+        spacing="0"
     )

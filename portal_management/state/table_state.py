@@ -2,13 +2,11 @@ import reflex as rx
 
 
 class TableState(rx.State):
-    # Example data
     rows: list[dict] = [
         {"id": 1, "name": "Alice", "email": "alice@mail.com"},
         {"id": 2, "name": "Bob", "email": "bob@mail.com"},
     ]
 
-    # State for editing
     editing_row: dict | None = None
     show_modal: bool = False
     edit_name: str = ""
@@ -16,7 +14,6 @@ class TableState(rx.State):
     modal_open: bool = False
 
     def open_edit(self, row: dict):
-        """Open modal and preload form with row data."""
         self.editing_row = row
         self.edit_name = row["name"]
         self.edit_email = row["email"]
@@ -32,7 +29,6 @@ class TableState(rx.State):
             self.close_modal()
 
     def save_edit(self):
-        """Update data in rows list."""
         if self.editing_row:
             for r in self.rows:
                 if r["id"] == self.editing_row["id"]:
