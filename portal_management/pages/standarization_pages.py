@@ -2,36 +2,10 @@ import reflex as rx
 
 from portal_management.components.sidebar import sidebar_bottom_profile
 from portal_management.state.table_state import TableState
-
-
-def edit_modal():
-    return rx.dialog.root(
-        rx.dialog.trigger(rx.box()),
-        rx.dialog.content(
-            rx.dialog.title("Edit Row"),
-            rx.dialog.description("Update user info"),
-            rx.vstack(
-                rx.input(
-                    value=TableState.edit_name,
-                    placeholder="Name",
-                    on_change=TableState.set_edit_name,
-                ),
-                rx.input(
-                    value=TableState.edit_email,
-                    placeholder="Email",
-                    on_change=TableState.set_edit_email,
-                ),
-                rx.hstack(
-                    rx.button("Cancel", on_click=TableState.close_modal),
-                    rx.button("Save", on_click=TableState.save_edit, color_scheme="green"),
-                    spacing="3",
-                ),
-                spacing="4",
-            ),
-        ),
-        open=TableState.show_modal,
-        on_open_change=TableState.set_modal_open
-    )
+from portal_management.components.modal_standarization import (
+    edit_modal,
+    add_modal
+)
 
 
 def table_with_edit():
@@ -40,8 +14,9 @@ def table_with_edit():
             rx.table.header(
                 rx.table.row(
                     rx.table.column_header_cell("ID"),
-                    rx.table.column_header_cell("Name"),
-                    rx.table.column_header_cell("Email"),
+                    rx.table.column_header_cell("Type"),
+                    rx.table.column_header_cell("Standarization"),
+                    rx.table.column_header_cell("Query"),
                     rx.table.column_header_cell("Action"),
                 )
             ),
@@ -50,8 +25,9 @@ def table_with_edit():
                     TableState.rows,
                     lambda row: rx.table.row(
                         rx.table.cell(row["id"]),
-                        rx.table.cell(row["name"]),
-                        rx.table.cell(row["email"]),
+                        rx.table.cell(row["type"]),
+                        rx.table.cell(row["standarization"]),
+                        rx.table.cell(row["query"]),
                         rx.table.cell(
                             rx.button(
                                 "Edit",
@@ -64,6 +40,11 @@ def table_with_edit():
             ),
         ),
         edit_modal(),
+        bg="white",
+        spacing="2",
+        padding="1.5em",
+        border_radius="1em",
+        shadow="lg",
     )
 
 
@@ -79,6 +60,23 @@ def standarization_page() -> rx.Component:
         rx.box(
             rx.vstack(
                 rx.heading("Standarization", size="7"),
+                rx.hstack(
+                    rx.select(
+                        items=TableState.types,
+                        placeholder="level",
+                        on_change=[TableState.set_select_type, TableState.change_table_data],
+                        color_scheme="blue",
+                        width="20%"
+                    ),
+                    rx.button(
+                        "Add Standarization",
+                        size="2",
+                        color_scheme="green",
+                        width="10%",
+                        on_click=TableState.open_modal_add
+                    ),
+                    add_modal()
+                ),
                 table_with_edit(),
                 flex="1",
                 min_width="0",
@@ -88,9 +86,9 @@ def standarization_page() -> rx.Component:
                 width="100%",
             ),
             padding="2em",
-            bg="#F3F4F6",
-            height="100vh",
             flex="1",
         ),
-        spacing="0"
+        spacing="0",
+        on_mount=TableState.load_data,
+        bg="#F3F4F6"
     )

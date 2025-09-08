@@ -2,6 +2,7 @@ import httpx
 import reflex as rx
 
 from datetime import datetime, timedelta
+from loguru import logger
 
 
 class DashboardState(rx.State):
@@ -19,14 +20,14 @@ class DashboardState(rx.State):
             headers = {
                 'Authorization': f"Bearer {self.auth_token}"
             }
-            print(params)
+            logger.info(params)
             resp = await client.request(
                 method,
                 uri,
                 headers=headers,
                 params=params
             )
-            print(resp.text)
+            logger.info("Response Dashboard data: {}", resp.text)
 
         if resp.status_code == 200:
             data = resp.json()['data']
@@ -53,7 +54,7 @@ class DashboardState(rx.State):
                 "endDate": end_date
             }
         )
-        self.timeseries = data_timeseries
+        self.timeseries = sorted(data_timeseries, key=lambda x: x["date"], reverse=False)
 
     async def before_render(self):
         if not self.auth_token:
