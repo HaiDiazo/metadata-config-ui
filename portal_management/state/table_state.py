@@ -21,11 +21,15 @@ class TableState(rx.State):
 
     select_type: str = ""
 
+    add_types: str = ""
+    add_standarization: str = ""
+    add_query: str = ""
+
     edit_type: str = ""
     edit_standarization: str = ""
     edit_query: str = ""
 
-    async def hit_api(self, uri: str, method: str, params: dict = None):
+    async def hit_api(self, uri: str, method: str, params: dict = None, json: dict = None):
         async with httpx.AsyncClient(timeout=5) as client:
             headers = {
                 'Authorization': f"Bearer {self.auth_token}"
@@ -35,24 +39,28 @@ class TableState(rx.State):
                 method,
                 uri,
                 headers=headers,
-                params=params
+                params=params,
+                json=json
             )
 
         if resp.status_code == 200:
-            data = resp.json()['data']
-            logger.info("Total data get: {}", len(data))
-            return data
+            if 'data' in resp.json():
+                data = resp.json()['data']
+                logger.info("Total data get: {}", len(data))
+                return data
+            return resp.json()
         else:
             logger.info(resp.text)
             self.error_message = "Error Get Data"
             return []
 
-    async def load_data(self):
+    async def load_data(self, types: str = None):
+        logger.info("On Mount load")
         data_standarization = await self.hit_api(
             method="GET",
             uri="http://192.168.24.237:8679/metadata/get-standarization",
             params={
-                "type": "level"
+                "type": types if types is not None else "level"
             }
         )
         self.rows = data_standarization
@@ -90,7 +98,29 @@ class TableState(rx.State):
 
     def close_modal_add(self):
         self.show_modal_add = False
+        self.add_types = ""
+        self.add_standarization = ""
+        self.add_query = ""
         self.add_row = None
+
+    async def save_add(self):
+        add_standarization = {
+          "type": self.add_types if self.add_types != "" else self.select_type,
+          "standarization": self.add_standarization,
+          "query": self.add_query
+        }
+
+        logger.info(add_standarization)
+
+        result = await self.hit_api(
+            uri="http://192.168.24.237:8679/metadata/create-standarization",
+            method="POST",
+            json=add_standarization
+        )
+
+        if 'statusCode' in result and result['statusCode'] == 200:
+            await self.load_data(types=self.add_types if self.add_types != "" else self.select_type)
+        self.close_modal_add()
 
     def close_modal(self):
         self.show_modal = False

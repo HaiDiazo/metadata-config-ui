@@ -62,14 +62,14 @@ def add_modal():
     return rx.dialog.root(
         rx.dialog.trigger(rx.box()),
         rx.dialog.content(
-            rx.dialog.title(f"Add Standarization"),
+            rx.dialog.title(f"Add New Standarization"),
             rx.vstack(
                 rx.hstack(
                     rx.text("Standarization:", size="2", text_align="left", width="120px"),
                     rx.input(
-                        value=TableState.edit_standarization,
+                        value=TableState.add_standarization,
                         placeholder="Standarization",
-                        on_change=TableState.set_edit_standarization,
+                        on_change=TableState.set_add_standarization,
                         width="100%",
                     ),
                     spacing="2",
@@ -79,9 +79,9 @@ def add_modal():
                 rx.hstack(
                     rx.text("Type:", size="2", text_align="left", width="120px"),
                     rx.input(
-                        value=TableState.edit_type,
+                        value=TableState.select_type,
                         placeholder="Type",
-                        on_change=TableState.set_edit_type,
+                        on_change=TableState.set_add_types,
                         width="100%",
                     ),
                     spacing="2",
@@ -91,9 +91,9 @@ def add_modal():
                 rx.hstack(
                     rx.text("Query:", size="2", text_align="left", width="120px"),
                     rx.text_area(
-                        value=TableState.edit_query,
+                        value=TableState.add_query,
                         placeholder="Query",
-                        on_change=TableState.set_edit_query,
+                        on_change=TableState.set_add_query,
                         width="100%",
                     ),
                     spacing="2",
@@ -102,7 +102,7 @@ def add_modal():
                 ),
                 rx.hstack(
                     rx.button("Cancel", on_click=TableState.close_modal_add),
-                    rx.button("Save", on_click=TableState.save_edit, color_scheme="green"),
+                    rx.button("Save", on_click=TableState.save_add, color_scheme="green"),
                     spacing="3",
                 ),
                 spacing="4",

@@ -37,6 +37,7 @@ class DashboardState(rx.State):
             return []
 
     async def load_data(self):
+        logger.info("On Mount Load Dashboard")
         data_account = await self.hit_api(method="GET", uri="http://192.168.24.237:8679/account/get-all")
         self.total_users = len(data_account)
 

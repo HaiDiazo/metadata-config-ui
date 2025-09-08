@@ -89,6 +89,7 @@ def standarization_page() -> rx.Component:
             flex="1",
         ),
         spacing="0",
-        on_mount=TableState.load_data,
-        bg="#F3F4F6"
+        bg="#F3F4F6",
+        on_mount=TableState.load_data
+
     )
