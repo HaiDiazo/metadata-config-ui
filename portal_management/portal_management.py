@@ -5,6 +5,16 @@ from portal_management.pages.standarization_pages import standarization_page
 from portal_management.state.login_state import LoginState
 
 
+def custom_head():
+    return rx.heading(
+        rx.el.link(
+            rel="icon",
+            type="image/png",
+            href="images/metadata-icon-white.png",
+        )
+    )
+
+
 def login_default() -> rx.Component:
     return rx.card(
         rx.vstack(
@@ -101,6 +111,7 @@ app = rx.App(
         has_background=True
     )
 )
+app.head_components.append(custom_head())
 app.add_page(index, route="/")
 app.add_page(dashboard_page, route="/dashboard")
 app.add_page(standarization_page, route="/standarization")
