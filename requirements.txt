@@ -1,2 +1,2 @@
-reflex
 loguru
+reflex==0.8.6
